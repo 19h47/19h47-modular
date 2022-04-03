@@ -9,7 +9,7 @@
 ## Installation
 
 ```sh
-npm install modujs
+npm install @19h47/modular
 ```
 
 ## Why
@@ -26,7 +26,7 @@ Just what's missing from JavaScript to seamlessly work in a modular way with the
 #### Main file
 
 ```js
-import modular from "modujs";
+import modular from "@19h47/modular";
 import * as modules from "./modules";
 
 const app = new modular({
@@ -35,7 +35,7 @@ const app = new modular({
 app.init(app);
 ```
 
-> If you use **Webpack**, you can omit the `modules` option, **Modular** will try to [dynamic import](https://webpack.js.org/guides/code-splitting/) all modules found in the `modules` folder.
+> If you use **Webpack**, you can omit the `modules` option and the module file, **Modular** will try to [dynamic import](https://webpack.js.org/guides/code-splitting/) all modules found in the `modules` folder.
 
 #### Module example
 
@@ -47,7 +47,7 @@ app.init(app);
 ```
 
 ```js
-import { module } from 'modujs';
+import { module } from '@19h47/modular';
 
 export default class extends module {
     constructor(m) {
