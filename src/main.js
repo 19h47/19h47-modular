@@ -19,7 +19,7 @@ const asyncForEach = async (array, callback) => {
     }
 };
 
-class Modular {
+export default class {
     constructor(options) {
         // eslint-disable-next-line no-unused-expressions
         this.app;
