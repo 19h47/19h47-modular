@@ -7,36 +7,45 @@
 <p align="center">Dead simple modular JavaScript framework for ES modules.</p>
 
 ## Installation
+
 ```sh
 npm install modujs
 ```
 
 ## Why
+
 Just what's missing from JavaScript to seamlessly work in a modular way with the DOM and ES modules.
 
-- Automatically init visible modules.
-- Easily call other modules methods.
-- Quickly set scoped events with delegation.
-- Simply select DOM elements scoped in their module.
+-   Automatically init visible modules.
+-   Easily call other modules methods.
+-   Quickly set scoped events with delegation.
+-   Simply select DOM elements scoped in their module.
 
 ## Usage
+
 #### Main file
+
 ```js
-import modular from 'modujs';
-import * as modules from './modules';
+import modular from "modujs";
+import * as modules from "./modules";
 
 const app = new modular({
-    modules: modules
+    modules: modules,
 });
 app.init(app);
 ```
+
+> If you use **Webpack**, you can omit the `modules` option, **Modular** will try to [dynamic import](https://webpack.js.org/guides/code-splitting/) all modules found in the `modules` folder.
+
 #### Module example
+
 ```html
 <div data-module-example>
     <h2>Example</h2>
     <button data-example="button">Button</button>
 </div>
 ```
+
 ```js
 import { module } from 'modujs';
 
@@ -58,42 +67,48 @@ export default class extends module {
 ```
 
 #### Modules file
+
 ```js
-export {default as example} from './modules/example';
+export { default as example } from "./modules/example";
 ```
 
 ## Objects
-| Object | Description | Example |
-| ------ | ----------- | ------- | 
-| `this.el` | The module element. | `this.el.classList.add('is-open')` |
-| `this.events` | The module events. | `this.events = { click: 'open' }` |
 
+| Object        | Description         | Example                            |
+| ------------- | ------------------- | ---------------------------------- |
+| `this.el`     | The module element. | `this.el.classList.add('is-open')` |
+| `this.events` | The module events.  | `this.events = { click: 'open' }`  |
 
 ## Methods
-| Method | Description | Example |
-| ------ | ----------- | ------- | 
-| `this.$('query'[, 'context'])` | Module scoped query selector. | `this.$('dropdown', e.currentTarget)` |
-| `this.parent('name', 'context')` | Module scoped parent selector. | `this.parent('item', e.currentTarget)` |
-| `this.call('function', arg, 'module'[, 'id'])` | Call another module method. | `this.call('scrollTo', section, 'scroll', 'main')` |
-| `this.on('event', 'module', function[, 'id'])` | Listen to another module event. | `this.on('select', 'Select', this.changeSomething, 'first')` |
-| `this.getData('name'[, 'context'])` | Get module or target data attribute. | `this.getData('name', e.currentTarget)` |
-| `this.setData('name', 'value'[, 'context'])` | Set module or target data attribute. | `this.setData('name', 'value', e.currentTarget)` |
+
+| Method                                         | Description                          | Example                                                      |
+| ---------------------------------------------- | ------------------------------------ | ------------------------------------------------------------ |
+| `this.$('query'[, 'context'])`                 | Module scoped query selector.        | `this.$('dropdown', e.currentTarget)`                        |
+| `this.parent('name', 'context')`               | Module scoped parent selector.       | `this.parent('item', e.currentTarget)`                       |
+| `this.call('function', arg, 'module'[, 'id'])` | Call another module method.          | `this.call('scrollTo', section, 'scroll', 'main')`           |
+| `this.on('event', 'module', function[, 'id'])` | Listen to another module event.      | `this.on('select', 'Select', this.changeSomething, 'first')` |
+| `this.getData('name'[, 'context'])`            | Get module or target data attribute. | `this.getData('name', e.currentTarget)`                      |
+| `this.setData('name', 'value'[, 'context'])`   | Set module or target data attribute. | `this.setData('name', 'value', e.currentTarget)`             |
 
 ## Custom methods
-| Method | Description |
-| ------ | ----------- |
-| `init() { [...] }` | Automatically called on app init. Use this instead of the `constructor`, if you want to use the methods above. |
+
+| Method                | Description                                                                                                               |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `init() { [...] }`    | Automatically called on app init. Use this instead of the `constructor`, if you want to use the methods above.            |
 | `destroy() { [...] }` | Automatically called on app destroy. Use this if you need to destroy anything specific. The events are already destroyed. |
 
 ## App methods
-| Method | Description |
-| ------ | ----------- |
-| `this.call('init', 'app')` | Init all modules. |
-| `this.call('update', scope, 'app')` | Update scoped modules. |
+
+| Method                                 | Description                    |
+| -------------------------------------- | ------------------------------ |
+| `this.call('init', 'app')`             | Init all modules.              |
+| `this.call('update', scope, 'app')`    | Update scoped modules.         |
 | `this.call('destroy'[, scope], 'app')` | Destroy all or scoped modules. |
 
 ## Examples
+
 #### Modal example
+
 ```html
 <div data-module-modal="one">
     <h2 data-modal="text">Modal</h2>
@@ -101,6 +116,7 @@ export {default as example} from './modules/example';
     <button data-modal="cancel">Cancel</button>
 </div>
 ```
+
 ```js
 import { module } from 'modujs';
 
@@ -115,13 +131,13 @@ export default class extends module {
             }
         }
     }
-    
+
     init() { // Init is called automatically
         this.open();
     }
 
     open() {
-        this.el.classlist.add('is-open');   
+        this.el.classlist.add('is-open');
     }
 
     accept() {
@@ -135,13 +151,16 @@ export default class extends module {
     }
 }
 ```
+
 #### Call example
+
 ```html
 <div data-module-example>
     <button data-example="one">One</button>
     <button data-example="all">All</button>
 </div>
 ```
+
 ```js
 import { module } from 'modujs';
 
@@ -166,7 +185,9 @@ export default class extends module {
     }
 }
 ```
+
 #### Accordion example
+
 ```html
 <div data-module-accordion data-accordion-open="true">
     <section data-accordion="section">
@@ -187,6 +208,7 @@ export default class extends module {
     </section>
 </div>
 ```
+
 ```js
 import { module } from 'modujs';
 
@@ -211,7 +233,7 @@ export default class extends module {
         const target = e.currentTarget;
         const section = this.parent('section', target);
         const main = this.$('main', target);
-        
+
         if (section.classList.contains('is-open')) {
             section.classList.remove('is-open');
         } else {

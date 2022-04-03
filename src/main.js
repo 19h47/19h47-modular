@@ -1,86 +1,130 @@
-export default class {
+const toUpper = str => str.charAt(0).toUpperCase() + str.slice(1);
+const toCamel = arr => arr.reduce((a, b) => a + toUpper(b));
+
+const getModule = async name => {
+    const module = await import(`../modules/${name}` /* webpackChunkName: "module-[request]" */);
+
+    return module.default;
+};
+
+const destroyModule = module => {
+    module.mDestroy();
+    module.destroy();
+};
+
+const asyncForEach = async (array, callback) => {
+    for (let index = 0; index < array.length; index += 1) {
+        // eslint-disable-next-line no-await-in-loop
+        await callback(array[index], index, array);
+    }
+};
+
+class Modular {
     constructor(options) {
+        // eslint-disable-next-line no-unused-expressions
         this.app;
-        this.modules = options.modules;
+        this.modules = options.modules || [];
         this.currentModules = {};
         this.activeModules = {};
         this.newModules = {};
         this.moduleId = 0;
     }
 
-    init(app, scope) {
+    async init(app, scope) {
+        // console.clear();
+        // console.info('✨ Modular.init()', { id: this.moduleId });
+
         const container = scope || document;
-        const elements = container.querySelectorAll('*');
+        const elements = [...container.querySelectorAll('*')].filter(el =>
+            [...el.attributes].some(attr => attr.name.startsWith('data-module')),
+        );
 
         if (app && !this.app) {
             this.app = app;
         }
 
-        this.activeModules['app'] = { 'app': this.app };
+        this.activeModules.app = { app: this.app };
 
-        elements.forEach((el) => {
-          Array.from(el.attributes).forEach((i) => {
+        await asyncForEach(elements, async el => {
+            await asyncForEach([...el.attributes], async ({ name, value }) => {
+                if (name.startsWith('data-module')) {
+                    const dataName = name.split('-').splice(2);
 
-            if (i.name.startsWith('data-module')) {
-                let moduleExists = false;
-                let dataName = i.name.split('-').splice(2);
-                let moduleName = this.toCamel(dataName);
+                    let moduleExists = false;
+                    const moduleName = toUpper(toCamel(dataName));
 
-                if (this.modules[moduleName]) {
-                    moduleExists = true;
-                } else if (this.modules[this.toUpper(moduleName)]) {
-                    moduleName = this.toUpper(moduleName);
-                    moduleExists = true;
-                }
-
-                if (moduleExists) {
-                    const options = {
-                        el: el,
-                        name: moduleName,
-                        dataName: dataName.join('-')
-                    };
-
-                    const module = new this.modules[moduleName](options);
-                    let id = i.value;
-
-                    if (!id) {
-                        this.moduleId++;
-                        id = 'm' + this.moduleId;
-                        el.setAttribute(i.name, id);
-                    }
-
-                    this.addActiveModule(moduleName, id, module);
-
-                    const moduleId = moduleName + '-' + id;
-
-                    if (scope) {
-                        this.newModules[moduleId] = module;
+                    if (this.modules[moduleName]) {
+                        moduleExists = true;
                     } else {
-                        this.currentModules[moduleId] = module;
+                        const module = await getModule(moduleName);
+
+                        this.modules[moduleName] = module;
+                        moduleExists = true;
+
+                        // console.log(`📥 Module ${moduleName} imported`);
+                    }
+
+                    if (moduleExists) {
+                        const options = {
+                            el,
+                            name: moduleName,
+                            dataName: dataName.join('-'),
+                        };
+
+                        const module = new this.modules[moduleName](options);
+                        let id = value;
+
+                        if (!id) {
+                            this.moduleId += 1;
+                            id = `m${this.moduleId}`;
+                            el.setAttribute(name, id);
+                        }
+
+                        this.addActiveModule(moduleName, id, module);
+
+                        const moduleId = `${moduleName}-${id}`;
+
+                        // console.log(this.newModules);
+
+                        if (scope) {
+                            this.newModules[moduleId] = module;
+                        } else {
+                            this.currentModules[moduleId] = module;
+                        }
                     }
                 }
-            }
-          })
-        })
+            });
+        });
+
+        // console.log(`✨ Modular initialized`);
 
         Object.entries(this.currentModules).forEach(([id, module]) => {
             if (scope) {
+                // console.log(`✅ Module ${id} activated`);
+
                 const split = id.split('-');
                 const moduleName = split.shift();
                 const moduleId = split.pop();
+
                 this.addActiveModule(moduleName, moduleId, module);
             } else {
+                // console.log(`✅ Module ${id} initialized`);
+
                 this.initModule(module);
             }
         });
     }
 
     initModule(module) {
+        // console.info(`Modular.initModule()`, this.activeModules);
+
         module.mInit(this.activeModules);
         module.init();
     }
 
     addActiveModule(name, id, module) {
+        // console.info(`Modular.addActiveModule()`, name, id, this.activeModules[name]);
+
         if (this.activeModules[name]) {
             Object.assign(this.activeModules[name], { [id]: module });
         } else {
@@ -88,21 +132,25 @@ export default class {
         }
     }
 
-    update(scope) {
-        this.init(this.app, scope);
+    async update(scope) {
+        // console.info(`🏀 Modular.update()`, scope);
 
-        Object.entries(this.currentModules).forEach(([id, module]) => {
-            module.mUpdate(this.activeModules);
-        });
+        await this.init(this.app, scope);
 
-        Object.entries(this.newModules).forEach(([id, module]) => {
-            this.initModule(module);
-        });
+        // eslint-disable-next-line no-unused-vars
+        Object.entries(this.currentModules).forEach(([_, module]) =>
+            module.mUpdate(this.activeModules),
+        );
+
+        // eslint-disable-next-line no-unused-vars
+        Object.entries(this.newModules).forEach(([_, module]) => this.initModule(module));
 
         Object.assign(this.currentModules, this.newModules);
     }
 
     destroy(scope) {
+        // console.info(`🗑 Modular.destroy()`, scope);
+
         if (scope) {
             this.destroyScope(scope);
         } else {
@@ -113,56 +161,40 @@ export default class {
     destroyScope(scope) {
         const elements = scope.querySelectorAll('*');
 
-        elements.forEach((el) => {
-            Array.from(el.attributes).forEach((i) => {
-
+        elements.forEach(el => {
+            Array.from(el.attributes).forEach(i => {
                 if (i.name.startsWith('data-module')) {
                     const id = i.value;
                     const dataName = i.name.split('-').splice(2);
-                    let moduleName = this.toCamel(dataName) + '-' + id;
+                    let moduleName = `${toCamel(dataName)}-${id}`;
                     let moduleExists = false;
 
                     if (this.currentModules[moduleName]) {
                         moduleExists = true;
-                    } else if (this.currentModules[this.toUpper(moduleName)]) {
-                        moduleName = this.toUpper(moduleName);
+                    } else if (this.currentModules[toUpper(moduleName)]) {
+                        moduleName = toUpper(moduleName);
                         moduleExists = true;
                     }
 
                     if (moduleExists) {
-                        this.destroyModule(this.currentModules[moduleName]);
+                        destroyModule(this.currentModules[moduleName]);
 
                         delete this.currentModules[moduleName];
                     }
                 }
-
-            })
-        })
+            });
+        });
 
         this.activeModules = {};
         this.newModules = {};
     }
 
     destroyModules() {
-        Object.entries(this.currentModules).forEach(([id, module]) => {
-            this.destroyModule(module);
-        });
+        // eslint-disable-next-line no-unused-vars
+        Object.entries(this.currentModules).forEach(([_, module]) => destroyModule(module));
 
         this.currentModules = [];
     }
-
-    destroyModule(module) {
-        module.mDestroy();
-        module.destroy();
-    }
-
-    toCamel(arr) {
-        return arr.reduce((a, b) => a + this.toUpper(b));
-    }
-
-    toUpper(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
 }
 
-export {default as module} from './module';
+export { default as module } from './module';
