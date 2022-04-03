@@ -1,10 +1,17 @@
 {
-  "name": "modujs",
-  "version": "1.4.2",
+  "name": "@19h47/modular",
+  "version": "2.0.0",
   "description": "Dead simple modular JavaScript framework for ES modules.",
+  "keywords": [
+    "Webpack",
+    "JavaScript"
+  ],
   "repository": "modularorg/modularjs",
-  "author": "Antoine Boulanger <hello@antoineboulanger.com> (https://antoineboulanger.com)",
   "license": "MIT",
+  "author": "Antoine Boulanger <hello@antoineboulanger.com> (https://antoineboulanger.com)",
+  "contributors": [
+    "Jérémy Levron <jeremylevron@19h47.fr> (https://19h47.fr)"
+  ],
   "main": "dist/main.cjs.js",
   "module": "dist/main.esm.js",
   "scripts": {

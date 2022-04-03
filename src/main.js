@@ -2,6 +2,8 @@ const toUpper = str => str.charAt(0).toUpperCase() + str.slice(1);
 const toCamel = arr => arr.reduce((a, b) => a + toUpper(b));
 
 const getModule = async name => {
+    // @todo Make it more flexible
+    // For now it use alias from Webpack config, @see https://github.com/19h47/19h47-scripts/blob/main/config/webpack.resolve.alias.js
     const module = await import(`@/scripts/modules/${name}` /* webpackChunkName: "module-[request]" */);
 
     return module.default;
