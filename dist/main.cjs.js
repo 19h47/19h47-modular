@@ -388,8 +388,6 @@ var _default = /*#__PURE__*/function () {
   return _default;
 }();
 
-var path = require('path');
-
 var toUpper = function toUpper(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
@@ -408,7 +406,7 @@ var getModule = /*#__PURE__*/function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return new Promise(function (resolve) { resolve(_interopNamespace(require(path.resolve(__dirname, "src/modules/".concat(name))
+            return new Promise(function (resolve) { resolve(_interopNamespace(require("@/scripts/modules/".concat(name)
             /* webpackChunkName: "module-[request]" */
             ))); });
 

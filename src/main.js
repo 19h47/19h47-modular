@@ -1,10 +1,8 @@
-const path = require('path');
-
 const toUpper = str => str.charAt(0).toUpperCase() + str.slice(1);
 const toCamel = arr => arr.reduce((a, b) => a + toUpper(b));
 
 const getModule = async name => {
-    const module = await import(path.resolve(__dirname, `src/modules/${name}`) /* webpackChunkName: "module-[request]" */);
+    const module = await import(`@/scripts/modules/${name}` /* webpackChunkName: "module-[request]" */);
 
     return module.default;
 };

@@ -365,8 +365,6 @@ var _default = /*#__PURE__*/function () {
   return _default;
 }();
 
-var path = require('path');
-
 var toUpper = function toUpper(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 };
@@ -385,7 +383,7 @@ var getModule = /*#__PURE__*/function () {
         switch (_context.prev = _context.next) {
           case 0:
             _context.next = 2;
-            return import(path.resolve(__dirname, "src/modules/".concat(name))
+            return import("@/scripts/modules/".concat(name)
             /* webpackChunkName: "module-[request]" */
             );
 
