@@ -520,6 +520,7 @@ var _default$1 = /*#__PURE__*/function () {
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
+                // console.info('✨ Modules collected');
                 container = scope || document;
                 elements = _toConsumableArray(container.querySelectorAll('*')).filter(function (el) {
                   return _toConsumableArray(el.attributes).some(function (attr) {
@@ -652,14 +653,13 @@ var _default$1 = /*#__PURE__*/function () {
     value: function initModules(scope) {
       var _this2 = this;
 
-      // console.log(`✨ Current Modules initialized`);
-      var container = scope || document;
+      // console.log(`✨ Modules initialized`);
       Object.entries(this.currentModules).forEach(function (_ref6) {
         var _ref7 = _slicedToArray(_ref6, 2),
             id = _ref7[0],
             module = _ref7[1];
 
-        if (container) {
+        if (scope) {
           // console.log(`✅ Module ${id} activated`);
           var split = id.split('-');
           var moduleName = split.shift();
@@ -675,7 +675,7 @@ var _default$1 = /*#__PURE__*/function () {
   }, {
     key: "initModule",
     value: function initModule(module) {
-      // console.info(`Modular.initModule()`, this.activeModules);
+      // console.info(`✨ Module initialized`);
       module.mInit(this.activeModules);
       module.init();
     }
@@ -703,8 +703,7 @@ var _default$1 = /*#__PURE__*/function () {
                 return this.init(this.app, scope);
 
               case 2:
-                this.initModules(scope); // eslint-disable-next-line no-unused-vars
-
+                // eslint-disable-next-line no-unused-vars
                 Object.entries(this.currentModules).forEach(function (_ref8) {
                   var _ref9 = _slicedToArray(_ref8, 2),
                       _ = _ref9[0],
@@ -722,7 +721,7 @@ var _default$1 = /*#__PURE__*/function () {
                 });
                 Object.assign(this.currentModules, this.newModules);
 
-              case 6:
+              case 5:
               case "end":
                 return _context7.stop();
             }

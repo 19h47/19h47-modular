@@ -34,13 +34,15 @@ export default class {
 
     async init(app, scope) {
         // console.clear();
-        // console.info('✨ Modular.init()', { id: this.moduleId });
+        // console.info('✨ Modular initialized');
 
         await this.collectModules(app, scope);
         this.initModules(scope);
     }
 
     async collectModules(app, scope) {
+        // console.info('✨ Modules collected');
+
         const container = scope || document;
         const elements = [...container.querySelectorAll('*')].filter(el =>
             [...el.attributes].some(attr => attr.name.startsWith('data-module')),
@@ -105,12 +107,10 @@ export default class {
     }
 
     initModules(scope) {
-        // console.log(`✨ Current Modules initialized`);
-
-        const container = scope || document;
+        // console.log(`✨ Modules initialized`);
 
         Object.entries(this.currentModules).forEach(([id, module]) => {
-            if (container) {
+            if (scope) {
                 // console.log(`✅ Module ${id} activated`);
 
                 const split = id.split('-');
@@ -127,7 +127,7 @@ export default class {
     }
 
     initModule(module) {
-        // console.info(`Modular.initModule()`, this.activeModules);
+        // console.info(`✨ Module initialized`);
 
         module.mInit(this.activeModules);
         module.init();
@@ -147,8 +147,6 @@ export default class {
         // console.info(`🏀 Modular.update()`, scope);
 
         await this.init(this.app, scope);
-
-        this.initModules(scope);
 
         // eslint-disable-next-line no-unused-vars
         Object.entries(this.currentModules).forEach(([_, module]) =>
