@@ -461,16 +461,42 @@ var _default$1 = /*#__PURE__*/function () {
   _createClass(_default, [{
     key: "init",
     value: function () {
-      var _init = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(app, scope) {
+      var _init = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(app, scope) {
+        return regeneratorRuntime.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return this.collectModules(app, scope);
+
+              case 2:
+                this.initModules(scope);
+
+              case 3:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function init(_x4, _x5) {
+        return _init.apply(this, arguments);
+      }
+
+      return init;
+    }()
+  }, {
+    key: "collectModules",
+    value: function () {
+      var _collectModules = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(app, scope) {
         var _this = this;
 
         var container, elements;
-        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+        return regeneratorRuntime.wrap(function _callee6$(_context6) {
           while (1) {
-            switch (_context5.prev = _context5.next) {
+            switch (_context6.prev = _context6.next) {
               case 0:
-                // console.clear();
-                // console.info('✨ Modular.init()', { id: this.moduleId });
                 container = scope || document;
                 elements = _toConsumableArray(container.querySelectorAll('*')).filter(function (el) {
                   return _toConsumableArray(el.attributes).some(function (attr) {
@@ -485,26 +511,26 @@ var _default$1 = /*#__PURE__*/function () {
                 this.activeModules.app = {
                   app: this.app
                 };
-                _context5.next = 6;
+                _context6.next = 6;
                 return asyncForEach(elements, /*#__PURE__*/function () {
-                  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(el) {
-                    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(el) {
+                    return regeneratorRuntime.wrap(function _callee5$(_context5) {
                       while (1) {
-                        switch (_context4.prev = _context4.next) {
+                        switch (_context5.prev = _context5.next) {
                           case 0:
-                            _context4.next = 2;
+                            _context5.next = 2;
                             return asyncForEach(_toConsumableArray(el.attributes), /*#__PURE__*/function () {
-                              var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(_ref4) {
+                              var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(_ref4) {
                                 var name, value, dataName, moduleExists, moduleName, module, options, _module, id, moduleId;
 
-                                return regeneratorRuntime.wrap(function _callee3$(_context3) {
+                                return regeneratorRuntime.wrap(function _callee4$(_context4) {
                                   while (1) {
-                                    switch (_context3.prev = _context3.next) {
+                                    switch (_context4.prev = _context4.next) {
                                       case 0:
                                         name = _ref4.name, value = _ref4.value;
 
                                         if (!name.startsWith('data-module')) {
-                                          _context3.next = 15;
+                                          _context4.next = 15;
                                           break;
                                         }
 
@@ -513,20 +539,20 @@ var _default$1 = /*#__PURE__*/function () {
                                         moduleName = toUpper(toCamel(dataName));
 
                                         if (!_this.modules[moduleName]) {
-                                          _context3.next = 9;
+                                          _context4.next = 9;
                                           break;
                                         }
 
                                         moduleExists = true;
-                                        _context3.next = 14;
+                                        _context4.next = 14;
                                         break;
 
                                       case 9:
-                                        _context3.next = 11;
+                                        _context4.next = 11;
                                         return getModule(moduleName);
 
                                       case 11:
-                                        module = _context3.sent;
+                                        module = _context4.sent;
                                         _this.modules[moduleName] = module;
                                         moduleExists = true; // console.log(`📥 Module ${moduleName} imported`);
 
@@ -560,64 +586,69 @@ var _default$1 = /*#__PURE__*/function () {
 
                                       case 15:
                                       case "end":
-                                        return _context3.stop();
+                                        return _context4.stop();
                                     }
                                   }
-                                }, _callee3);
+                                }, _callee4);
                               }));
 
-                              return function (_x7) {
+                              return function (_x9) {
                                 return _ref5.apply(this, arguments);
                               };
                             }());
 
                           case 2:
                           case "end":
-                            return _context4.stop();
+                            return _context5.stop();
                         }
                       }
-                    }, _callee4);
+                    }, _callee5);
                   }));
 
-                  return function (_x6) {
+                  return function (_x8) {
                     return _ref3.apply(this, arguments);
                   };
                 }());
 
               case 6:
-                // console.log(`✨ Modular initialized`);
-                Object.entries(this.currentModules).forEach(function (_ref6) {
-                  var _ref7 = _slicedToArray(_ref6, 2),
-                      id = _ref7[0],
-                      module = _ref7[1];
-
-                  if (scope) {
-                    // console.log(`✅ Module ${id} activated`);
-                    var split = id.split('-');
-                    var moduleName = split.shift();
-                    var moduleId = split.pop();
-
-                    _this.addActiveModule(moduleName, moduleId, module);
-                  } else {
-                    // console.log(`✅ Module ${id} initialized`);
-                    _this.initModule(module);
-                  }
-                });
-
-              case 7:
               case "end":
-                return _context5.stop();
+                return _context6.stop();
             }
           }
-        }, _callee5, this);
+        }, _callee6, this);
       }));
 
-      function init(_x4, _x5) {
-        return _init.apply(this, arguments);
+      function collectModules(_x6, _x7) {
+        return _collectModules.apply(this, arguments);
       }
 
-      return init;
+      return collectModules;
     }()
+  }, {
+    key: "initModules",
+    value: function initModules(scope) {
+      var _this2 = this;
+
+      // console.log(`✨ Current Modules initialized`);
+      var container = scope || document;
+      Object.entries(this.currentModules).forEach(function (_ref6) {
+        var _ref7 = _slicedToArray(_ref6, 2),
+            id = _ref7[0],
+            module = _ref7[1];
+
+        if (container) {
+          // console.log(`✅ Module ${id} activated`);
+          var split = id.split('-');
+          var moduleName = split.shift();
+          var moduleId = split.pop();
+
+          _this2.addActiveModule(moduleName, moduleId, module);
+        } else {
+          // console.log(`✅ Module ${id} initialized`);
+          _this2.initModule(module);
+        }
+      });
+    }
   }, {
     key: "initModule",
     value: function initModule(module) {
@@ -638,24 +669,25 @@ var _default$1 = /*#__PURE__*/function () {
   }, {
     key: "update",
     value: function () {
-      var _update = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(scope) {
-        var _this2 = this;
+      var _update = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(scope) {
+        var _this3 = this;
 
-        return regeneratorRuntime.wrap(function _callee6$(_context6) {
+        return regeneratorRuntime.wrap(function _callee7$(_context7) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context7.prev = _context7.next) {
               case 0:
-                _context6.next = 2;
+                _context7.next = 2;
                 return this.init(this.app, scope);
 
               case 2:
-                // eslint-disable-next-line no-unused-vars
+                this.initModules(scope); // eslint-disable-next-line no-unused-vars
+
                 Object.entries(this.currentModules).forEach(function (_ref8) {
                   var _ref9 = _slicedToArray(_ref8, 2),
                       _ = _ref9[0],
                       module = _ref9[1];
 
-                  return module.mUpdate(_this2.activeModules);
+                  return module.mUpdate(_this3.activeModules);
                 }); // eslint-disable-next-line no-unused-vars
 
                 Object.entries(this.newModules).forEach(function (_ref10) {
@@ -663,19 +695,19 @@ var _default$1 = /*#__PURE__*/function () {
                       _ = _ref11[0],
                       module = _ref11[1];
 
-                  return _this2.initModule(module);
+                  return _this3.initModule(module);
                 });
                 Object.assign(this.currentModules, this.newModules);
 
-              case 5:
+              case 6:
               case "end":
-                return _context6.stop();
+                return _context7.stop();
             }
           }
-        }, _callee6, this);
+        }, _callee7, this);
       }));
 
-      function update(_x8) {
+      function update(_x10) {
         return _update.apply(this, arguments);
       }
 
@@ -694,7 +726,7 @@ var _default$1 = /*#__PURE__*/function () {
   }, {
     key: "destroyScope",
     value: function destroyScope(scope) {
-      var _this3 = this;
+      var _this4 = this;
 
       var elements = scope.querySelectorAll('*');
       elements.forEach(function (el) {
@@ -705,16 +737,16 @@ var _default$1 = /*#__PURE__*/function () {
             var moduleName = "".concat(toCamel(dataName), "-").concat(id);
             var moduleExists = false;
 
-            if (_this3.currentModules[moduleName]) {
+            if (_this4.currentModules[moduleName]) {
               moduleExists = true;
-            } else if (_this3.currentModules[toUpper(moduleName)]) {
+            } else if (_this4.currentModules[toUpper(moduleName)]) {
               moduleName = toUpper(moduleName);
               moduleExists = true;
             }
 
             if (moduleExists) {
-              destroyModule(_this3.currentModules[moduleName]);
-              delete _this3.currentModules[moduleName];
+              destroyModule(_this4.currentModules[moduleName]);
+              delete _this4.currentModules[moduleName];
             }
           }
         });

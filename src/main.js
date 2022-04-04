@@ -36,6 +36,11 @@ export default class {
         // console.clear();
         // console.info('✨ Modular.init()', { id: this.moduleId });
 
+        await this.collectModules(app, scope);
+        this.initModules(scope);
+    }
+
+    async collectModules(app, scope) {
         const container = scope || document;
         const elements = [...container.querySelectorAll('*')].filter(el =>
             [...el.attributes].some(attr => attr.name.startsWith('data-module')),
@@ -97,11 +102,15 @@ export default class {
                 }
             });
         });
+    }
 
-        // console.log(`✨ Modular initialized`);
+    initModules(scope) {
+        // console.log(`✨ Current Modules initialized`);
+
+        const container = scope || document;
 
         Object.entries(this.currentModules).forEach(([id, module]) => {
-            if (scope) {
+            if (container) {
                 // console.log(`✅ Module ${id} activated`);
 
                 const split = id.split('-');
@@ -138,6 +147,8 @@ export default class {
         // console.info(`🏀 Modular.update()`, scope);
 
         await this.init(this.app, scope);
+
+        this.initModules(scope);
 
         // eslint-disable-next-line no-unused-vars
         Object.entries(this.currentModules).forEach(([_, module]) =>
