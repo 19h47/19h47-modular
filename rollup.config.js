@@ -1,5 +1,6 @@
-import resolve from "@rollup/plugin-node-resolve";
+import { nodeResolve } from '@rollup/plugin-node-resolve';
 import babel from "@rollup/plugin-babel";
+import { terser } from "rollup-plugin-terser";
 
 export default [
     {
@@ -11,16 +12,15 @@ export default [
             },
             {
                 file: "dist/main.esm.js",
-                format: "esm",
+                format: "es",
             },
         ],
-        external: [/@babel\/runtime/],
         plugins: [
-            resolve(),
+            nodeResolve(),
             babel({
-                exclude: "node_modules/**",
-                babelHelpers: "runtime",
+                exclude: ['node_modules/**']
             }),
+            terser(),
         ],
     },
 ];
